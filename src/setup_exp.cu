@@ -13,6 +13,7 @@
 #include "encoding_tools.h"
 #include "ldpc_kernels.h"
 #include "globals.h"
+#include "spdlog/spdlog.h"
 #include <cassert>
 
 template <typename T>
@@ -127,7 +128,7 @@ template dev_mem<float> setup_dev_memory<float>(const params* p,
                                                 const ldpc_params* ldpc,
                                                 const host_mem<float>* host);
 
-cuda_grid setup_gpu_grid(const ldpc_params* ldpc, const int n_mcw, const int n_cw_per_mcw) {
+cuda_grid setup_gpu_grid(const ldpc_params* ldpc, const int n_cw_per_mcw, const int n_mcw) {
     //////////////// Setup CUDA kernel grid dimensions ////////////////
     // CNP Kernel Dimensions
     constexpr int n_threads_per_block_mod = 32;
@@ -137,6 +138,13 @@ cuda_grid setup_gpu_grid(const ldpc_params* ldpc, const int n_mcw, const int n_c
     dim3 cnp_threads(block_size_x, n_cw_per_mcw, 1);   // 127, 2 .   y = index of CW in a MCW
     const auto cnp_threads_per_block = block_size_x * n_cw_per_mcw;
     const auto shared_r_cache_size = cnp_threads_per_block * ldpc->n_nz_in_row * sizeof(float);
+
+	auto logger = spdlog::get("GPU");
+	if (cnp_threads_per_block > 1024) {
+        logger->error("TOO MANY THREADS IN A BLOCK. Change n_cw_per_mcw");
+	}
+	assert(cnp_threads_per_block <= 1024);
+
 
     // VNP Kernel Dimensions
     dim3 vnp_blocks(ldpc->H_cols, n_mcw, 1);
