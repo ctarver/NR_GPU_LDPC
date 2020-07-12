@@ -30,3 +30,8 @@
 *.exe
 *.out
 *.app
+
+# Project Files
+.vs/*
+out/*
+CMakeSettings.json
