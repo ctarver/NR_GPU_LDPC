@@ -50,7 +50,7 @@ void perform_gpu_ldpc_decoding(dev_mem<T>* d,
     copy_from_gpu<char>(h->hd_packed_cuda, d->hard_decision_packed, h->mem_size_hd_cuda_packed,
                         d->streams, stream_index);
 }
-#ifdef CHAR_PRC
+#if CHAR_PRC
 template void perform_gpu_ldpc_decoding<char>(dev_mem<char>* d,
                                               host_mem<char>* h,
                                               const cuda_grid* g,
