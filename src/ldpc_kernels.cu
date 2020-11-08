@@ -299,7 +299,7 @@ __global__ void cnp_kernel(T* dev_llr, T* dev_dt, T* dev_R) {
                                                    // this as a local array?
         int addr_temp = h_element_t.y * p->n_total_cn + offsetR;
 #if HALF_PRC == 1
-        dev_dt[addr_temp] = __float2half(R_temp - RCache[i * threadsPerBlock + iRCacheLine]);
+        dev_dt[addr_temp] = __float2half(R_temp - RCache[i * p->threads_per_block + iRCacheLine]);
         dev_R[addr_temp] = __float2half(R_temp);  // update R, R=R'.
 #elif CHAR_PRC == 1
         dev_dt[addr_temp] = (char)R_temp - RCache[i * p->threads_per_block + iRCacheLine];
