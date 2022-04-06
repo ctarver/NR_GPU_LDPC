@@ -11,7 +11,7 @@ Install the CUDA Toolkit. I am using what is currently the [latest one, 10.1.](h
 ### Building the Project
 Clone the repo.
 ```
-git clone git@github.sisa.samsung.com:c-tarver/GPU_LDPC_Decoder.git
+git clone git@github.com:ctarver/NR_GPU_LDPC.git
 ```
 
 In the root of the repo create a build directory and cd to it.
